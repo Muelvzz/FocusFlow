@@ -1,0 +1,31 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: clamp(1rem, 1.25vw, 1rem);
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 0;
+}
+
+.left-nav {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+}
+
+.right-nav > ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    cursor: pointer;
+}
+
+.right-nav ul li:hover {
+    color: black;
+    transition: color 0.2s ease;
+}
