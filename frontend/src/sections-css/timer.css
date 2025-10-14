@@ -1,0 +1,77 @@
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fb;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+}
+
+.timer-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.timer-display h1 {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.timer-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.timer-buttons > button {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.start {
+    background-color: #27ae60;
+}
+.start:hover {
+    background-color: #1f8f4d;
+}
+.start:active {
+    background-color: #196c3a;
+}
+
+.pause {
+    background-color: #2980b9;
+}
+.pause:hover {
+    background-color: #226b9d;
+}
+.pause:active {
+    background-color: #1b5780;
+}
+
+.reset {
+    background-color: #e74c3c;
+}
+.reset:hover {
+    background-color: #c0392b;
+}
+.reset:active {
+    background-color: #a93226;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+.timer-display h1.running {
+    animation: pulse 1s ease-in-out infinite;
+}
