@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import '../sections-css/reflection.css'
 
 export default function Reflection() {
@@ -6,6 +6,7 @@ export default function Reflection() {
     // states for handling user inputs
     const [userInput, setUserInput] = useState("")
     const [showModal, setShowModal] = useState(false)
+    const [showMessage, setShowMessage] = useState(false)
 
     // retrieves the history of the user
     const [inputList, setInputList] = useState(() => {
@@ -19,15 +20,31 @@ export default function Reflection() {
     }
 
     // handles the input of the user when they press 'submit'
+    let timeoutId
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // checks if the user clicks the 'submit' but with empty submission
         if (userInput.trim() !== "") {
             setInputList([...inputList, userInput])
-            console.log(userInput)
+            setShowMessage(true)
+
+            clearTimeout(timeoutId)
+            setTimeout(() => setShowMessage(false), 2000)
         }
         setUserInput("")
+    }
+
+    // deleting certain entries in the modal
+    const handleDelete = (index) => {
+        const updatedList = inputList.filter((_, i) => i !== index)
+        setInputList(updatedList)
+    }
+
+    const handleDeleteAll = () => {
+        if (window.confirm("Are you sure you want to delete all reflections?")) {
+            setInputList([])
+        }
     }
 
     // handles multiple user submission
@@ -42,6 +59,11 @@ export default function Reflection() {
                     <h1>Reflection Form</h1>
                     <button className='view-reflc-btn' onClick={() => setShowModal(true)}>View Reflections</button>
                 </div>
+                    {
+                        showMessage && (
+                            <h3 className='success-message'>Successfully Added!</h3>
+                        )
+                    }
                 <form onSubmit={handleSubmit} className="form-container">
                     <textarea 
                     className="reflection-input" 
@@ -64,14 +86,19 @@ export default function Reflection() {
                             <div className="modal-body">
                                 {inputList.length > 0 ? (
                                     inputList.map((entry, index) => (
-                                        <div key={ index } className="reflection-entry">
-                                            <p>{ entry }</p>
-                                        </div>
+                                        <ul className="reflc-ent-cont">
+                                            <li className="reflection-entry" key={ index }>{ entry }</li><button className='del-btn' onClick={() => handleDelete(index)}>X</button>
+                                        </ul>
                                     ))) : (
                                         <p className="no-reflection">No reflections yet...</p>
                                     )}
                             </div>
+
+                            {inputList.length > 2 && (
+                                <button className='del-all-btn' onClick={ () => handleDeleteAll() }>Delete All</button>
+                            )}
                         </div>
+
                     </div>
                 )
             }
