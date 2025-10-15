@@ -7,6 +7,14 @@
     padding: 1rem;
 }
 
+.bottom-panel {
+    margin-top: 2rem;
+    padding: 1rem;
+    justify-content: center;
+    width: 75%;
+    margin: 0 auto;
+}
+
 .left-panel {
     width: 100%;
     text-align: center;

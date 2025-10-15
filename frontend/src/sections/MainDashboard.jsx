@@ -10,8 +10,10 @@ export default function MainDashboard() {
                     <Timer/>
                 </div>
                 <div className="right-panel">
-                    <Reflection/>
                 </div>
+            </div>
+            <div className="bottom-panel">
+                <Reflection/>
             </div>
         </>
     )
