@@ -1,12 +1,26 @@
+// #### 2. **Progress Tracking Bar**
+// Show a **completion bar** (e.g., “3 of 7 tasks completed”) at the top of the todo list.
+// > 🔹 Ties perfectly to your existing “progress bar” feature for visual motivation.
+// ---
+// #### 7. **Persistence (LocalStorage Integration)**
+// Save todos in **localStorage** so they remain after page refresh.
+// > 🔹 Ensures data persistence, making it more practical for real users.
+// ---
+
 import { useEffect, useState } from 'react'
 import '../sections-css/todolist.css'
 
 export default function TodoList() {
     const [addButton, setAddButton] = useState(false)
+
     const [userTask, setUserTask] = useState("")
+
     const [showEdit, setShowEdit] = useState(false)
     const [editingIndex, setEditingIndex] = useState(null)
     const [editingValue, setEditingValue] = useState("")
+
+    const [taskPriority, setTaskPriority] = useState("")
+
     const [taskList, setTaskList] = useState(() => {
         const saved = localStorage.getItem("userTask");
         return saved ? JSON.parse(saved) : []
@@ -18,7 +32,12 @@ export default function TodoList() {
 
     const handleSubmit = () => {
         if (userTask.trim() !== "") {
-            setTaskList([...taskList, userTask])
+            const userData = {
+                id: Date.now(),
+                priority: taskPriority,
+                task: userTask,
+            }
+            setTaskList([...taskList, userData])
             console.log(taskList)
         }
         setUserTask("")
@@ -64,10 +83,21 @@ export default function TodoList() {
                         type="text"
                         placeholder="Enter your task..."
                         className="todolist-input"
-                        value={ userTask }
-                        onChange={ handleChange }
+                        value={userTask}
+                        onChange={handleChange}
                     />
-                    <button className="add-btn" onClick={ () => handleSubmit() }>Add</button>
+                    <select
+                        className="priority-dropdown"
+                        value={taskPriority}
+                        onChange={(e) => setTaskPriority(e.target.value)}
+                    >
+                        <option value="none">No Priority</option>
+                        <option value="medium">Medium</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                    <button className="add-btn" onClick={() => handleSubmit()}>
+                        Add
+                    </button>
                 </div>
             )}
 
@@ -75,13 +105,19 @@ export default function TodoList() {
                 <ul className="todolist-list">
                 {taskList.length > 0 ? (
                     taskList.map((entry, index) => (
-                    <li className="task-entry" key={index}>
+                    <li className={ entry.priority === "urgent" ? (
+                        "task-entry-urgent"
+                    ) : entry.priority === "medium" ? (
+                        "task-entry-medium"
+                    ) : (
+                        "task-entry"
+                    )} key={entry.id}>
                         <span>
                             <button
                                 className="task-edit-btn"
                                 onClick={() => {setShowEdit(!showEdit); setEditingIndex(index)}}
                             >✏️</button>
-                            {entry}
+                            {entry.task}
                         </span>
                         <button
                         className="task-del-btn"
@@ -101,7 +137,7 @@ export default function TodoList() {
                             value={ editingValue }
                             onChange={ (e) => setEditingValue(e.target.value) }
                         />
-                        <button className="add-btn" onClick={handleUpdate} type='submit'>Add</button>
+                        <button className="add-btn" onClick={handleUpdate} type='submit'>Update</button>
                     </div>
                 )}
                 </ul>

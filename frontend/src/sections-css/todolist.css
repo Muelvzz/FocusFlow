@@ -69,6 +69,63 @@
     box-shadow: 0 0 4px rgba(182, 214, 37, 0.4);
 }
 
+.todolist-input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.todolist-input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 1.5px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.priority-dropdown {
+    padding: 0.55rem 0.75rem;
+    border: 1.5px solid #ccc;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.priority-dropdown:hover {
+    border-color: #888;
+}
+
+.priority-dropdown option[value="none"] {
+    color: grey;
+}
+
+.priority-dropdown option[value="medium"] {
+    color: orange;
+}
+
+.priority-dropdown option[value="urgent"] {
+    color: red;
+}
+
+.add-btn {
+    padding: 0.55rem 1.2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+    background-color: #45a049;
+}
+
 /* Add Button */
 .add-btn {
     background-color: #27ae60;
@@ -87,7 +144,6 @@
     transform: scale(1.05);
 }
 
-/* Content Section */
 /* Content Section */
 .todolist-content {
     min-height: 6rem;
@@ -121,11 +177,43 @@
     background-color: #f9fafb;
     padding: 0.6rem 0.9rem;
     border-radius: 0.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid grey;
     transition: all 0.25s ease;
 }
 
 .task-entry:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.01);
+}
+
+.task-entry-medium {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4f8;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.5rem;
+    border: 1px solid orange;
+    transition: all 0.25s ease;
+}
+
+.task-entry-medium:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.01);
+}
+
+.task-entry-urgent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4f8;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.5rem;
+    border: 1px solid red;
+    transition: all 0.25s ease;
+}
+
+.task-entry-urgent:hover {
     background-color: #f0f4f8;
     transform: scale(1.01);
 }
