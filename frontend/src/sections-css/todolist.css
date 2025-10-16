@@ -88,7 +88,85 @@
 }
 
 /* Content Section */
+/* Content Section */
 .todolist-content {
+    min-height: 6rem;
+    display: flex;
+    flex-direction: column;
+    border: 1.5px dashed #ccc;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #555;
+    padding: 1rem;
+    font-size: 0.95rem;
+    overflow-y: auto;
+}
+
+/* Task List */
+.todolist-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* Task Entry */
+.task-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    transition: all 0.25s ease;
+}
+
+.task-entry:hover {
+    background-color: #f0f4f8;
+    transform: scale(1.01);
+}
+
+/* Left side: Edit + Text */
+.task-entry span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Edit Button */
+.task-edit-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.task-edit-btn:hover {
+    transform: scale(1.2);
+    color: #f39c12;
+}
+
+/* Delete Button */
+.task-del-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.task-del-btn:hover {
+    transform: scale(1.2);
+    color: #e74c3c;
+}
+
+/* Empty State */
+.empty-state {
     min-height: 6rem;
     display: flex;
     align-items: center;
