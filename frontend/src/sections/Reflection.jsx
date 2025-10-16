@@ -5,8 +5,17 @@ export default function Reflection() {
 
     // states for handling user inputs
     const [userInput, setUserInput] = useState("")
+
+    // states for the modal
     const [showModal, setShowModal] = useState(false)
+
+    // states for the form
     const [showMessage, setShowMessage] = useState(false)
+
+    // states for edit modal
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editIndex, setEditIndex] = useState(null)
+    const [editValue, setEditValue] = useState("")
 
     // retrieves the history of the user
     const [inputList, setInputList] = useState(() => {
@@ -44,6 +53,30 @@ export default function Reflection() {
     const handleDeleteAll = () => {
         if (window.confirm("Are you sure you want to delete all reflections?")) {
             setInputList([])
+        }
+    }
+
+    const handleEditClick = (index) => {
+        setEditIndex(index)
+        setEditValue(inputList[index])
+        setShowEditModal(true)
+    }
+
+    // tracks the input of the user in the form
+    const handleUpdateChange = (e) => {
+        setEditValue(e.target.value)
+    }
+
+    // handles the input of the user when they press 'submit'
+    const handleUpdate = (e) => {
+        e.preventDefault();
+
+        // checks if the user clicks the 'submit' but with empty submission
+        if (editValue.trim() !== "") {
+            const updatedList = [...inputList]
+            updatedList[editIndex] = editValue
+            setInputList(updatedList)
+            setShowEditModal(false)
         }
     }
 
@@ -87,7 +120,9 @@ export default function Reflection() {
                                 {inputList.length > 0 ? (
                                     inputList.map((entry, index) => (
                                         <ul className="reflc-ent-cont">
-                                            <li className="reflection-entry" key={ index }>{ entry }</li><button className='del-btn' onClick={() => handleDelete(index)}>X</button>
+                                            <li className="reflection-entry" key={ index }>{ entry }</li>
+                                            <button className="edit-btn" onClick={() => handleEditClick(index)}>✏️</button>
+                                            <button className='del-btn' onClick={() => handleDelete(index)}>❌</button>
                                         </ul>
                                     ))) : (
                                         <p className="no-reflection">No reflections yet...</p>
@@ -99,6 +134,34 @@ export default function Reflection() {
                             )}
                         </div>
 
+                    </div>
+                )
+            }
+
+            {/* edit modal */}
+            {
+                showEditModal && (
+                    <div className="edit-modal-overlay">
+                        <div className="edit-modal-content">
+                            <div className="edit-modal-body">
+                                <button 
+                                onClick={() => setShowEditModal(false)} className='close-modal-edit-btn'
+                                >close</button>
+                                <form 
+                                className="form-edit-container"
+                                onSubmit={ handleUpdate }
+                                >
+                                    <textarea 
+                                    className="edit-input"
+                                    onChange={ (e) => setEditValue(e.target.value) } 
+                                    >{ editValue }</textarea>
+                                    <button 
+                                    className='update-btn' 
+                                    type='submit'
+                                    >Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 )
             }

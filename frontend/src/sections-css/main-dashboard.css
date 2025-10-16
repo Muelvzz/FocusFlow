@@ -11,11 +11,12 @@
     margin-top: 2rem;
     padding: 1rem;
     justify-content: center;
-    width: 75%;
+    align-items: center;
+    width: 80%;
     margin: 0 auto;
 }
 
-.left-panel {
+.left-panel, .right-panel {
     width: 100%;
     text-align: center;
     background-color: rgb(182, 194, 194);
@@ -23,10 +24,11 @@
     padding: 0.25rem;
 }
 
-.right-panel {
-    width: 100%;
-    text-align: center;
-    background-color: rgb(149, 236, 207);
-    padding: 0.25rem;
-    border-radius: 10px;
+@media screen and (max-width: 800px) {
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 80%;
+        margin: 0 auto;
+    }
 }
