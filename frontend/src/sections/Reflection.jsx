@@ -56,18 +56,19 @@ export default function Reflection() {
         }
     }
 
+    // editing certain entries in the modal
     const handleEditClick = (index) => {
         setEditIndex(index)
         setEditValue(inputList[index])
         setShowEditModal(true)
     }
 
-    // tracks the input of the user in the form
+    // tracks the edit input of the user
     const handleUpdateChange = (e) => {
         setEditValue(e.target.value)
     }
 
-    // handles the input of the user when they press 'submit'
+    // handles the edit input of the user when they press 'submit'
     const handleUpdate = (e) => {
         e.preventDefault();
 

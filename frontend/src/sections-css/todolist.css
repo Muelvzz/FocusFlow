@@ -1,0 +1,115 @@
+/* Main Container */
+.todolist-container {
+    background: #f8f9fb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    color: #222;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Header */
+.todolist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 0.5rem;
+}
+
+.todolist-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Add Task Button */
+.add-task-btn {
+    background-color: #b6d625;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #222;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-task-btn:hover {
+    background-color: #a2c11f;
+    transform: scale(1.05);
+}
+
+/* Input Container */
+.todolist-input-container {
+    margin-top: 0.8rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    width: 100%;
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Input Field */
+.todolist-input {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 0.5rem;
+    outline: none;
+    font-size: 0.95rem;
+    transition: border 0.2s ease;
+}
+
+.todolist-input:focus {
+    border-color: #b6d625;
+    box-shadow: 0 0 4px rgba(182, 214, 37, 0.4);
+}
+
+/* Add Button */
+.add-btn {
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: #219150;
+    transform: scale(1.05);
+}
+
+/* Content Section */
+.todolist-content {
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px dashed #ccc;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #777;
+    font-style: italic;
+    padding: 1rem;
+}
+
+/* Footer */
+.todolist-footer {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

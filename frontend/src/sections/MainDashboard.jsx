@@ -1,5 +1,6 @@
 import Timer from './Timer'
 import Reflection from './Reflection'
+import TodoList from './TodoList'
 import '../sections-css/main-dashboard.css'
 
 export default function MainDashboard() {
@@ -10,6 +11,7 @@ export default function MainDashboard() {
                     <Timer/>
                 </div>
                 <div className="right-panel">
+                    <TodoList/>
                 </div>
             </div>
             <div className="bottom-panel">
