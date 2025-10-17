@@ -2,10 +2,6 @@
 // Show a **completion bar** (e.g., “3 of 7 tasks completed”) at the top of the todo list.
 // > 🔹 Ties perfectly to your existing “progress bar” feature for visual motivation.
 // ---
-// #### 7. **Persistence (LocalStorage Integration)**
-// Save todos in **localStorage** so they remain after page refresh.
-// > 🔹 Ensures data persistence, making it more practical for real users.
-// ---
 
 import { useEffect, useState } from 'react'
 import '../sections-css/todolist.css'
@@ -13,16 +9,21 @@ import '../sections-css/todolist.css'
 export default function TodoList() {
     const [addButton, setAddButton] = useState(false)
 
-    const [userTask, setUserTask] = useState("")
-
     const [showEdit, setShowEdit] = useState(false)
     const [editingIndex, setEditingIndex] = useState(null)
     const [editingValue, setEditingValue] = useState("")
 
     const [taskPriority, setTaskPriority] = useState("")
 
+    const [userTask, setUserTask] = useState("")
     const [taskList, setTaskList] = useState(() => {
         const saved = localStorage.getItem("userTask");
+        return saved ? JSON.parse(saved) : []
+    })
+
+    const [isComplete, setIsComplete] = useState(false)
+    const [completeTaskList, setCompleteTaskList] = useState(() => {
+        const saved = localStorage.getItem("completeTasks");
         return saved ? JSON.parse(saved) : []
     })
 
@@ -36,6 +37,7 @@ export default function TodoList() {
                 id: Date.now(),
                 priority: taskPriority,
                 task: userTask,
+                isComplete: isComplete
             }
             setTaskList([...taskList, userData])
             console.log(taskList)
@@ -43,8 +45,8 @@ export default function TodoList() {
         setUserTask("")
     }
 
-    const handleDelete = (index) => {
-        const updatedTaskList = taskList.filter((_, i) => i !== index)
+    const handleDelete = (id) => {
+        const updatedTaskList = taskList.filter(task => task.id !== id)
         setTaskList(updatedTaskList)
     }
 
@@ -57,8 +59,24 @@ export default function TodoList() {
         }
     }
 
+    const handleComplete = (id) => {
+        const completedTask = taskList.map(task =>
+            task.id === id ? {
+                ...task,
+                isComplete: true
+            } : task
+        )
+        setTaskList(completedTask)
+    }
+
     useEffect(() => {
         localStorage.setItem("userTask", JSON.stringify(taskList))
+    }, [taskList])
+
+    useEffect(() => {
+        const completed = taskList.filter(task => task.isComplete === true)
+        setCompleteTaskList(completed)
+        localStorage.setItem("completeTasks", JSON.stringify(completed))
     }, [taskList])
 
     return (
@@ -103,43 +121,79 @@ export default function TodoList() {
 
             <div className="todolist-content">
                 <ul className="todolist-list">
-                {taskList.length > 0 ? (
-                    taskList.map((entry, index) => (
-                    <li className={ entry.priority === "urgent" ? (
-                        "task-entry-urgent"
-                    ) : entry.priority === "medium" ? (
-                        "task-entry-medium"
+                    {taskList.length > 0 ? (
+                        taskList.map((entry, index) => (
+                            ( entry.isComplete === false && (
+                                <li className={ entry.priority === "urgent" ? (
+                                    "task-entry-urgent"
+                                ) : entry.priority === "medium" ? (
+                                    "task-entry-medium"
+                                ) : (
+                                    "task-entry"
+                                )} key={entry.id}>
+                                    <span>
+                                        <button
+                                            className="task-edit-btn"
+                                            onClick={() => {setShowEdit(!showEdit); setEditingIndex(index)}}
+                                        >✏️</button>
+                                        {entry.task}
+                                    </span>
+                                    <span>
+                                        <button
+                                        className="task-del-btn"
+                                        onClick={() => handleDelete(entry.id)}
+                                        >❌</button>
+                                        <button
+                                        className="task-complete-btn"
+                                        onClick={() => handleComplete(entry.id)}
+                                        >✔️</button>
+                                    </span>
+                                </li>
+                            ))
+                        ))
                     ) : (
-                        "task-entry"
-                    )} key={entry.id}>
-                        <span>
-                            <button
-                                className="task-edit-btn"
-                                onClick={() => {setShowEdit(!showEdit); setEditingIndex(index)}}
-                            >✏️</button>
-                            {entry.task}
-                        </span>
-                        <button
-                        className="task-del-btn"
-                        onClick={() => handleDelete(index)}
-                        >❌</button>
-                    </li>
-                    ))
-                ) : (
-                    <p className="empty-state">No tasks yet. Add your first one!</p>
+                        <p className="empty-state">No tasks yet. Add your first one!</p>
+                    )}
+
+                    {showEdit && (
+                        <div className="todolist-input-container">
+                            <input
+                                type="text"
+                                className="todolist-input"
+                                value={ editingValue }
+                                onChange={ (e) => setEditingValue(e.target.value) }
+                            />
+                            <button className="add-btn" onClick={handleUpdate} type='submit'>Update</button>
+                        </div>
+                    )}
+                </ul>
+
+                { completeTaskList.length > 0 && (
+                    <h1>Completed Task</h1>
                 )}
 
-                {showEdit && (
-                    <div className="todolist-input-container">
-                        <input
-                            type="text"
-                            className="todolist-input"
-                            value={ editingValue }
-                            onChange={ (e) => setEditingValue(e.target.value) }
-                        />
-                        <button className="add-btn" onClick={handleUpdate} type='submit'>Update</button>
-                    </div>
-                )}
+                <ul>
+                    { completeTaskList.length > 0 && (
+                        completeTaskList.map((entry,index) => (
+                            <li className={ entry.priority === "urgent" ? (
+                                "task-entry-urgent"
+                            ) : entry.priority === "medium" ? (
+                                "task-entry-medium"
+                            ) : (
+                                "task-entry"
+                            )} key={entry.id}>
+                                <span>
+                                    {entry.task}
+                                </span>
+                                <span>
+                                    <button
+                                    className="task-del-btn"
+                                    onClick={() => handleDelete(entry.id)}
+                                    >❌</button>
+                                </span>
+                            </li>
+                        ))
+                    )}
                 </ul>
             </div>
 

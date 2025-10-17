@@ -179,6 +179,7 @@
     border-radius: 0.5rem;
     border: 1px solid grey;
     transition: all 0.25s ease;
+    text-align: left;
 }
 
 .task-entry:hover {
@@ -195,6 +196,7 @@
     border-radius: 0.5rem;
     border: 1px solid orange;
     transition: all 0.25s ease;
+    text-align: left;
 }
 
 .task-entry-medium:hover {
@@ -211,6 +213,7 @@
     border-radius: 0.5rem;
     border: 1px solid red;
     transition: all 0.25s ease;
+    text-align: left;
 }
 
 .task-entry-urgent:hover {
@@ -229,7 +232,7 @@
 .task-edit-btn {
     background: none;
     border: none;
-    font-size: 1rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
@@ -243,12 +246,26 @@
 .task-del-btn {
     background: none;
     border: none;
-    font-size: 1rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .task-del-btn:hover {
+    transform: scale(1.2);
+    color: #e74c3c;
+}
+
+/* Complete Button */
+.task-complete-btn {
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.task-complete-btn:hover {
     transform: scale(1.2);
     color: #e74c3c;
 }
