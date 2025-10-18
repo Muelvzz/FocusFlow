@@ -1,4 +1,4 @@
-nav {
+nav, .footer-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,7 +13,15 @@ nav {
     z-index: 0;
 }
 
-.left-nav {
+nav {
+    margin-bottom: 2rem;
+}
+
+.footer-container {
+    margin-top: 2rem;
+}
+
+.left-nav, .left-footer {
     font-family: 'Poppins', sans-serif;
     letter-spacing: 1px;
 }
@@ -28,4 +36,13 @@ nav {
 .right-nav ul li:hover {
     color: black;
     transition: color 0.2s ease;
+}
+
+.right-footer > a {
+    text-decoration: none;
+    color: #333;
+}
+
+.right-footer > a:hover {
+    color: #010000;
 }

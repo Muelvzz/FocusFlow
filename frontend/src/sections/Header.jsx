@@ -1,4 +1,4 @@
-import '../sections-css/header.css'
+import '../sections-css/header-footer.css'
 
 export default function Header() {
     return (
