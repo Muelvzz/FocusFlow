@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import '../sections-css/todolist.css'
+import '../component-css/todolist.css'
 
 export default function TodoList() {
     const [addButton, setAddButton] = useState(false)
@@ -44,14 +44,15 @@ export default function TodoList() {
         setTaskList(updatedTaskList)
     }
 
-    const handleUpdate = () => {
-        if (editingValue.trim() !== "") {
-            taskList[editingIndex] = editingValue
-            setTaskList(taskList)
-            setEditingValue("")
-            setShowEdit(false)
-        }
+    const handleUpdate = (index) => {
+    if (editingValue.trim() !== "") {
+        const updatedTask = [...taskList];
+        updatedTask[index].task = editingValue;
+        setTaskList(updatedTask);
+        setEditingValue("");
+        setShowEdit(false);
     }
+    };
 
     const handleComplete = (id) => {
         const completedTask = taskList.map(task =>
@@ -163,7 +164,7 @@ export default function TodoList() {
                                 value={ editingValue }
                                 onChange={ (e) => setEditingValue(e.target.value) }
                             />
-                            <button className="add-btn" onClick={handleUpdate} type='submit'>Update</button>
+                            <button className="add-btn" onClick={() => handleUpdate(editingIndex)} type='submit'>Update</button>
                         </div>
                     )}
                 </ul>

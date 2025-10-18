@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import '../sections-css/reflection.css'
+import '../component-css/reflection.css'
 
 export default function Reflection() {
 

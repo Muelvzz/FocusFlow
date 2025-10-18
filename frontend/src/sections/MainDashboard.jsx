@@ -1,6 +1,6 @@
-import Timer from './Timer'
-import Reflection from './Reflection'
-import TodoList from './TodoList'
+import Timer from '../components/Timer'
+import Reflection from '../components/Reflection'
+import TodoList from '../components/TodoList'
 import '../sections-css/main-dashboard.css'
 
 export default function MainDashboard() {

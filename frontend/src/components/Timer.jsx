@@ -1,4 +1,4 @@
-import '../sections-css/timer.css'
+import '../component-css/timer.css'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Timer() {
