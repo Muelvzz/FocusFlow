@@ -70,3 +70,16 @@
 .timer-display h1.running {
     animation: pulse 1s ease-in-out infinite;
 }
+
+@media screen and (min-width: 800px) {
+    .timer-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .timer-buttons {
+        gap: 0.5rem;
+    }
+}
