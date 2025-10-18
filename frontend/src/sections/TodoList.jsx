@@ -1,8 +1,3 @@
-// #### 2. **Progress Tracking Bar**
-// Show a **completion bar** (e.g., “3 of 7 tasks completed”) at the top of the todo list.
-// > 🔹 Ties perfectly to your existing “progress bar” feature for visual motivation.
-// ---
-
 import { useEffect, useState } from 'react'
 import '../sections-css/todolist.css'
 
@@ -40,7 +35,6 @@ export default function TodoList() {
                 isComplete: isComplete
             }
             setTaskList([...taskList, userData])
-            console.log(taskList)
         }
         setUserTask("")
     }
@@ -79,8 +73,14 @@ export default function TodoList() {
         localStorage.setItem("completeTasks", JSON.stringify(completed))
     }, [taskList])
 
+    const percent = (completeTaskList.length / taskList.length) * 100
+
     return (
         <div className="todolist-container">
+            <div className="todolist-progressbar-container">
+                <div className="progressbar-inner-container" style={{ width: `${percent}%` }}>
+                </div>
+            </div>
             <div className="todolist-header">
                 <div className="left-header">
                     <h2>Todo List</h2>
@@ -169,10 +169,10 @@ export default function TodoList() {
                 </ul>
 
                 { completeTaskList.length > 0 && (
-                    <h1>Completed Task</h1>
+                    <h3 className='task-complete-title'>Completed Task</h3 >
                 )}
 
-                <ul>
+                <ul className='complete-tasklist-container'>
                     { completeTaskList.length > 0 && (
                         completeTaskList.map((entry,index) => (
                             <li className={ entry.priority === "urgent" ? (
@@ -181,8 +181,12 @@ export default function TodoList() {
                                 "task-entry-medium"
                             ) : (
                                 "task-entry"
-                            )} key={entry.id}>
-                                <span>
+                            )} key={entry.id}
+                            style={{margin: '0.5rem 0'}}
+                            >
+                                <span
+                                    style={{textDecoration: 'line-through',}}
+                                >
                                     {entry.task}
                                 </span>
                                 <span>
