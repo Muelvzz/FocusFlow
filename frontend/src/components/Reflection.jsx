@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import '../component-css/reflection.css'
 
-export default function Reflection() {
+export default function Reflection({ isDark }) {
 
     // states for handling user inputs
     const [userInput, setUserInput] = useState("")
@@ -88,9 +88,9 @@ export default function Reflection() {
 
     return (
         <>
-            <div className="reflection-container">
+            <div className="reflection-container" style={{ background: isDark ? "#333" : "white"}}>
                 <div className="reflection-header">
-                    <h1>Reflection Form</h1>
+                    <h1 style={{ color: isDark ? "white" : "#333"}}>Reflection Form</h1>
                     <button className='view-reflc-btn' onClick={() => setShowModal(true)}>View Reflections</button>
                 </div>
                     {
@@ -98,12 +98,15 @@ export default function Reflection() {
                             <h3 className='success-message'>Successfully Added!</h3>
                         )
                     }
-                <form onSubmit={handleSubmit} className="form-container">
+                <form 
+                    onSubmit={handleSubmit} 
+                    className="form-container"
+                >
                     <textarea 
-                    className="reflection-input" 
-                    value={userInput}
-                    onChange={handleChange}
-                    placeholder='Write your thoughts here'
+                        className="reflection-input" 
+                        value={userInput}
+                        onChange={handleChange}
+                        placeholder='Write your thoughts here'
                     ></textarea>
                     <button className='reflection-button' type='submit'>Submit</button>
                 </form>

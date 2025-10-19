@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import '../component-css/todolist.css'
 
-export default function TodoList() {
+export default function TodoList({ isDark }) {
     const [addButton, setAddButton] = useState(false)
 
     const [showEdit, setShowEdit] = useState(false)
@@ -77,14 +77,14 @@ export default function TodoList() {
     const percent = (completeTaskList.length / taskList.length) * 100
 
     return (
-        <div className="todolist-container">
+        <div className="todolist-container" style={{backgroundColor: isDark ? "#333" : "white"}}>
             <div className="todolist-progressbar-container">
                 <div className="progressbar-inner-container" style={{ width: `${percent}%` }}>
                 </div>
             </div>
             <div className="todolist-header">
                 <div className="left-header">
-                    <h2>Todo List</h2>
+                    <h2 style={{color: isDark  && "white"}}>Todo List</h2>
                 </div>
                 <div className="right-header">
                     <button

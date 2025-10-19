@@ -33,9 +33,6 @@
     font-size: 1rem;
 }
 
-.start {
-    background-color: #27ae60;
-}
 .start:hover {
     background-color: #1f8f4d;
 }
@@ -43,9 +40,6 @@
     background-color: #196c3a;
 }
 
-.pause {
-    background-color: #2980b9;
-}
 .pause:hover {
     background-color: #226b9d;
 }
@@ -53,9 +47,6 @@
     background-color: #1b5780;
 }
 
-.reset {
-    background-color: #e74c3c;
-}
 .reset:hover {
     background-color: #c0392b;
 }
@@ -67,6 +58,7 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.85; }
 }
+
 .timer-display h1.running {
     animation: pulse 1s ease-in-out infinite;
 }
