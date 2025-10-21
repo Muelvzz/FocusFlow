@@ -20,6 +20,13 @@ export function quotes() {
         "We tend to place a lot of emphasis on our circumstance, as if it determines how we feel.",
         "Our brains construct a worldview based on what we pay attention to.",
         "Who you are, what you think, and do what you love is the sum of what you focus on.",
+        "Put more thought into your leisure time.",
+        "What percentage of your time should be spent on shallow work?",
+        "What are your 3-5 things that need to get done in the next 18 hours?",
+        "Speak less.",
+        "Never put yourself in a situation where a bad outcome affects you.",
+        "Learn to live with the idea that you're going to fail",
+        "Wealth creation comes to discipline.",
     ]
 
     return quotes

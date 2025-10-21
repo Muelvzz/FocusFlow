@@ -3,8 +3,14 @@ import { useState, useEffect, useRef } from 'react'
 
 export default function Timer({ isDark }) {
 
-    const [timer, setTimer] = useState(0)
-    const [isRunning, setIsRunning] = useState(false)
+    const [timer, setTimer] = useState(() => {
+        const saved = localStorage.getItem("localTimer")
+        return saved ? JSON.parse(saved) : 0;
+    })
+    const [isRunning, setIsRunning] = useState(() => {
+        const saved = localStorage.getItem("isRunning")
+        return saved ? JSON.parse(saved) : false;
+    })
 
     const interval = useRef(null)
 
@@ -16,6 +22,16 @@ export default function Timer({ isDark }) {
             }, 1000)
         }
         return () => clearInterval(interval.current)
+    }, [isRunning])
+
+    useEffect(() => {
+        if (timer % 5 === 0) {
+            localStorage.setItem("localTimer", JSON.stringify(timer))
+        }
+    }, [timer])
+
+    useEffect(() => {
+        localStorage.setItem("isRunning", JSON.stringify(isRunning))
     }, [isRunning])
 
     return (
@@ -41,7 +57,7 @@ export default function Timer({ isDark }) {
                     >Pause</button>
                     <button 
                         className="reset" 
-                        onClick={() => setTimer(0)}
+                        onClick={() => {setTimer(0); setIsRunning(false)}}
                         style={{ backgroundColor: isDark ? "#a93226" : "#e74c3c"}}
                     >Reset</button>
                 </div>
