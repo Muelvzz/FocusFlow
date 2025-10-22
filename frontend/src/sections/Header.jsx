@@ -17,7 +17,7 @@ export default function Header({ isDark, setIsDark }) {
         <>
             <nav className={ isDark ? "dark-nav" : "light-nav" }>
                 <div className="left-nav">FocusFlow</div>
-                <div className="middle-nav">
+                <div className="middle-nav" style={{textAlign: "center"}}>
                     <i>"{ quote }"</i>
                 </div>
                 <div className="right-nav">

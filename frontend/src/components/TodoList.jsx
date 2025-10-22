@@ -22,6 +22,8 @@ export default function TodoList({ isDark }) {
         return saved ? JSON.parse(saved) : []
     })
 
+    const [filterPriority, setFilterPriority] = useState("all")
+
     const handleChange = (e) => {
         setUserTask(e.target.value)
     }
@@ -122,9 +124,21 @@ export default function TodoList({ isDark }) {
 
             <div className="todolist-content">
                 <ul className="todolist-list">
+
+                    <select
+                        className="priority-dropdown"
+                        value={filterPriority}
+                        onChange={(e) => setFilterPriority(e.target.value)}
+                    >
+                        <option value="all">View all</option>
+                        <option value="none">View all no priority</option>
+                        <option value="medium">view all medium priority</option>
+                        <option value="urgent">view all urgent priority</option>
+                    </select>
+
                     {taskList.length > 0 ? (
                         taskList.map((entry, index) => (
-                            ( entry.isComplete === false && (
+                            ( entry.isComplete === false && (filterPriority === 'all' || entry.priority === filterPriority) && (
                                 <li className={ entry.priority === "urgent" ? (
                                     "task-entry-urgent"
                                 ) : entry.priority === "medium" ? (

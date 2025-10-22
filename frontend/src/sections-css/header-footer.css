@@ -67,3 +67,10 @@ nav {
 .right-footer > a:hover {
     color: #010000;
 }
+
+@media screen and (max-width: 500px) {
+    .right-nav > ul {
+        display: flex;
+        flex-direction: column;
+    }
+}
