@@ -16,6 +16,7 @@ export default function TodoList({ isDark }) {
         return saved ? JSON.parse(saved) : []
     })
 
+    const [showComplete, setShowCompoete] = useState(true)
     const [isComplete, setIsComplete] = useState(false)
     const [completeTaskList, setCompleteTaskList] = useState(() => {
         const saved = localStorage.getItem("completeTasks");
@@ -184,11 +185,14 @@ export default function TodoList({ isDark }) {
                 </ul>
 
                 { completeTaskList.length > 0 && (
-                    <h3 className='task-complete-title'>Completed Task</h3 >
+                    <div className='complete-task-header'>
+                        <h3 className='task-complete-title'>Completed Task</h3 >
+                        <button className='show-complete-btn' onClick={() => setShowCompoete(!showComplete)}>{ showComplete ? "Hide" : "Show" }</button>
+                    </div>
                 )}
 
                 <ul className='complete-tasklist-container'>
-                    { completeTaskList.length > 0 && (
+                    { completeTaskList.length > 0 && (showComplete) && (
                         completeTaskList.map((entry,index) => (
                             <li className={ entry.priority === "urgent" ? (
                                 "task-entry-urgent"

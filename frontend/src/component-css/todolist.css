@@ -246,6 +246,14 @@
     transform: scale(1.01);
 }
 
+/* Complete Task Header */
+.complete-task-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.75rem;
+}
+
 /* Left side: Edit + Text */
 .task-entry span {
     display: flex;
@@ -298,6 +306,24 @@
 .task-complete-title {
     text-align: left;
     margin: 0.5rem 0;
+}
+
+.show-complete-btn {
+    background-color: #b6d625;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #222;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-items: center;
+    font-size: smaller;
+}
+
+.show-complete-btn:hover {
+    background-color: #a2c11f;
+    transform: scale(1.05);
 }
 
 /* Empty State */
