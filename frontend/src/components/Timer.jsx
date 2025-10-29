@@ -3,165 +3,171 @@ import '../component-css/reflection.css'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Timer({ isDark }) {
+  const [elapsed, setElapsed] = useState(() => {
+    const saved = localStorage.getItem("localTimer")
+    return saved ? JSON.parse(saved) : 0
+  })
+  const [isRunning, setIsRunning] = useState(() => {
+    const saved = localStorage.getItem("isRunning")
+    return saved ? JSON.parse(saved) : false
+  })
+  const [showSession, setShowSession] = useState(false)
+  const [showMessage, setShowMessage] = useState(false)
+  const [sessionList, setSessionList] = useState(() => {
+    const saved = localStorage.getItem("timer")
+    return saved ? JSON.parse(saved) : []
+  })
 
-    const [timer, setTimer] = useState(() => {
-        const saved = localStorage.getItem("localTimer")
-        return saved ? JSON.parse(saved) : 0;
-    })
-    const [isRunning, setIsRunning] = useState(() => {
-        const saved = localStorage.getItem("isRunning")
-        return saved ? JSON.parse(saved) : false;
-    })
-    const [showSession, setShowSession] = useState(false)
-    const [showMessage, setShowMessage] = useState(false)
-    const [sessionList, setSessionList] = useState(() => {
-        const saved = localStorage.getItem("timer")
-        return saved ? JSON.parse(saved) : [];
-    })
+  const startTimeRef = useRef(null)
+  const intervalRef = useRef(null)
 
-    const interval = useRef(null)
+  useEffect(() => {
+    clearInterval(intervalRef.current)
 
-    const handleSave = (time) => {
+    if (isRunning) {
+      if (!startTimeRef.current) {
+        startTimeRef.current = Date.now() - elapsed * 1000
+      }
 
-        const now = new Date(Date.now());
-        const formatter = new Intl.DateTimeFormat('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-        const formattedDate = formatter.format(now);
-
-        if (timer !== 0) {
-            const userData = {
-                id : Date.now(),
-                date : formattedDate,
-                time: time,
-            }
-            setSessionList([...sessionList, userData])
-            setShowMessage(true)
-
-            setTimeout(() => setShowMessage(false), 1500)
-
-            setTimer(0)
-            setIsRunning(false)
-        }
+      intervalRef.current = setInterval(() => {
+        const now = Date.now()
+        const totalSeconds = Math.floor((now - startTimeRef.current) / 1000)
+        setElapsed(totalSeconds)
+      }, 1000)
     }
 
-    const handleDelete = (id) => {
-        const updatedSessionList = sessionList.filter(task => task.id !== id)
-        setSessionList(updatedSessionList)
+    return () => clearInterval(intervalRef.current)
+  }, [isRunning])
+
+  useEffect(() => {
+    if (elapsed % 5 === 0) {
+      localStorage.setItem("localTimer", JSON.stringify(elapsed))
     }
+  }, [elapsed])
 
-    useEffect(() => {
-        clearInterval(interval.current)
-        if (isRunning) {
-            interval.current = setInterval(() => {
-                setTimer(prev => prev + 1)
-            }, 1000)
-        }
-        return () => clearInterval(interval.current)
-    }, [isRunning])
+  useEffect(() => {
+    localStorage.setItem("isRunning", JSON.stringify(isRunning))
+  }, [isRunning])
 
-    useEffect(() => {
-        if (timer % 5 === 0) {
-            localStorage.setItem("localTimer", JSON.stringify(timer))
-        }
-    }, [timer])
+  useEffect(() => {
+    localStorage.setItem("timer", JSON.stringify(sessionList))
+  }, [sessionList])
 
-    useEffect(() => {
-        localStorage.setItem("isRunning", JSON.stringify(isRunning))
-    }, [isRunning])
+  const handleSave = (time) => {
+    const now = new Date()
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'numeric', day: 'numeric', year: 'numeric'
+    })
+    const formattedDate = formatter.format(now)
 
-    useEffect(() => {
-        localStorage.setItem("timer", JSON.stringify(sessionList))
-    }, [sessionList])
+    if (elapsed !== 0) {
+      const userData = {
+        id: Date.now(),
+        date: formattedDate,
+        time: time,
+      }
+      setSessionList([...sessionList, userData])
+      setShowMessage(true)
+      setTimeout(() => setShowMessage(false), 1500)
 
-    return (
-        <>
-            <div className="timer-container" style={{ backgroundColor: isDark ? "#333" : "white"}} >
-                <button
-                    className='view-history-btn'
-                    onClick={() => setShowSession(true)}
-                >View History</button>
+      setElapsed(0)
+      setIsRunning(false)
+      startTimeRef.current = null
+    }
+  }
 
-                {
-                    showSession && (
-                        <div className="modal-overlay">
+  const handleDelete = (id) => {
+    const updated = sessionList.filter(task => task.id !== id)
+    setSessionList(updated)
+  }
 
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <button onClick={() => setShowSession(false)} className='close-modal-btn'>X</button>
-                                    <h1>Session History</h1>
-                                </div>
-                                <div className="modal-body">
-                                    {sessionList.length > 0 ? (
-                                        sessionList.map((entry, index) => (
-                                            <ul className="reflc-ent-cont">
-                                                <li className="reflection-entry" key={ entry.id }>
-                                                    {String(Math.floor(entry.time / 3600)).padStart(2, '0')}:
-                                                    {String(Math.floor((entry.time % 3600) / 60)).padStart(2, '0')}:
-                                                    {String(entry.time % 60).padStart(2, '0')}
-                                                </li>
-                                                <p>{ entry.date }</p>
-                                                <button 
-                                                    className='del-btn'
-                                                    onClick={() => handleDelete(entry.id)}
-                                                >❌</button>
-                                            </ul>
-                                        ))) : (
-                                            <p className="no-reflection">No sessions yet...</p>
-                                        )}
-                                </div>
-                            </div>
+  const handleReset = () => {
+    setIsRunning(false)
+    setElapsed(0)
+    startTimeRef.current = null
+  }
 
-                        </div>
-                    )
-                }
+  const formatTime = (sec) => {
+    const hours = String(Math.floor(sec / 3600)).padStart(2, "0")
+    const minutes = String(Math.floor((sec % 3600) / 60)).padStart(2, "0")
+    const seconds = String(sec % 60).padStart(2, "0")
+    return `${hours}:${minutes}:${seconds}`
+  }
 
-                <div className="timer-display">
-                    <h1 style={{ color: isDark ? "white" : "black"}}>
-                        {String(Math.floor(timer / 3600)).padStart(2, '0')}:
-                        {String(Math.floor((timer % 3600) / 60)).padStart(2, '0')}:
-                        {String(timer % 60).padStart(2, '0')}
-                    </h1>
-                </div>
-                <div className="timer-buttons">
-                    {
-                        !isRunning && timer === 0 ? (
-                            <button 
-                                className="start" 
-                                onClick={() => setIsRunning(true)}
-                                style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
-                            >Start</button>
-                        ) : (
-                            <button 
-                                className="start" 
-                                onClick={() => handleSave(timer)}
-                                style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
-                            >Save</button>
-                        )
-                    }
+  return (
+    <div className="timer-container" style={{ backgroundColor: isDark ? "#333" : "white" }}>
+      <button className='view-history-btn' onClick={() => setShowSession(true)}>View History</button>
 
-                {
-                    timer > 0 && (
-                        <>
-                            <button 
-                                className="pause" 
-                                onClick={() => setIsRunning(!isRunning)}
-                                style={{ backgroundColor: isDark ? "#1b5780" : "#2980b9"}}
-                            >{ isRunning && timer > 0 ? "Pause" : "Resume" }</button>
-                            <button 
-                                className="reset" 
-                                onClick={() => {setTimer(0); setIsRunning(false)}}
-                                style={{ backgroundColor: isDark ? "#a93226" : "#e74c3c"}}
-                            >Reset</button>
-                        </>
-                    )
-                }
-
-                {
-                    showMessage && (
-                        <p><b>Timer Saved!</b></p>
-                    )
-                }
-                </div>
+      {showSession && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button onClick={() => setShowSession(false)} className='close-modal-btn'>X</button>
+              <h1>Session History</h1>
             </div>
-        </>
-    )
+            <div className="modal-body">
+              {sessionList.length > 0 ? (
+                sessionList.map((entry) => (
+                  <ul className="reflc-ent-cont" key={entry.id}>
+                    <li className="reflection-entry">
+                      {formatTime(entry.time)}
+                    </li>
+                    <p>{entry.date}</p>
+                    <button className='del-btn' onClick={() => handleDelete(entry.id)}>❌</button>
+                  </ul>
+                ))
+              ) : (
+                <p className="no-reflection">No sessions yet...</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="timer-display">
+        <h1 style={{ color: isDark ? "white" : "black" }}>{formatTime(elapsed)}</h1>
+      </div>
+
+      <div className="timer-buttons">
+        {!isRunning && elapsed === 0 ? (
+          <button
+            className="start"
+            onClick={() => setIsRunning(true)}
+            style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60" }}
+          >
+            Start
+          </button>
+        ) : (
+          <button
+            className="start"
+            onClick={() => handleSave(elapsed)}
+            style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60" }}
+          >
+            Save
+          </button>
+        )}
+
+        {elapsed > 0 && (
+          <>
+            <button
+              className="pause"
+              onClick={() => setIsRunning(!isRunning)}
+              style={{ backgroundColor: isDark ? "#1b5780" : "#2980b9" }}
+            >
+              {isRunning ? "Pause" : "Resume"}
+            </button>
+            <button
+              className="reset"
+              onClick={handleReset}
+              style={{ backgroundColor: isDark ? "#a93226" : "#e74c3c" }}
+            >
+              Reset
+            </button>
+          </>
+        )}
+
+        {showMessage && <p><b>Timer Saved!</b></p>}
+      </div>
+    </div>
+  )
 }
