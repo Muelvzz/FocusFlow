@@ -13,6 +13,7 @@ export default function Timer({ isDark }) {
         return saved ? JSON.parse(saved) : false;
     })
     const [showSession, setShowSession] = useState(false)
+    const [showMessage, setShowMessage] = useState(false)
     const [sessionList, setSessionList] = useState(() => {
         const saved = localStorage.getItem("timer")
         return saved ? JSON.parse(saved) : [];
@@ -33,7 +34,12 @@ export default function Timer({ isDark }) {
                 time: time,
             }
             setSessionList([...sessionList, userData])
-            console.log(sessionList)
+            setShowMessage(true)
+
+            setTimeout(() => setShowMessage(false), 1500)
+
+            setTimer(0)
+            setIsRunning(false)
         }
     }
 
@@ -116,21 +122,44 @@ export default function Timer({ isDark }) {
                     </h1>
                 </div>
                 <div className="timer-buttons">
-                    <button 
-                        className="start" 
-                        onClick={() => {isRunning ? handleSave(timer) : setIsRunning(true)}}
-                        style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
-                    >{ isRunning ? "Save" : "Start" }</button>
-                    <button 
-                        className="pause" 
-                        onClick={() => setIsRunning(false)}
-                        style={{ backgroundColor: isDark ? "#1b5780" : "#2980b9"}}
-                    >Pause</button>
-                    <button 
-                        className="reset" 
-                        onClick={() => {setTimer(0); setIsRunning(false)}}
-                        style={{ backgroundColor: isDark ? "#a93226" : "#e74c3c"}}
-                    >Reset</button>
+                    {
+                        !isRunning && timer === 0 ? (
+                            <button 
+                                className="start" 
+                                onClick={() => setIsRunning(true)}
+                                style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
+                            >Start</button>
+                        ) : (
+                            <button 
+                                className="start" 
+                                onClick={() => handleSave(timer)}
+                                style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
+                            >Save</button>
+                        )
+                    }
+
+                {
+                    timer > 0 && (
+                        <>
+                            <button 
+                                className="pause" 
+                                onClick={() => setIsRunning(!isRunning)}
+                                style={{ backgroundColor: isDark ? "#1b5780" : "#2980b9"}}
+                            >{ isRunning && timer > 0 ? "Pause" : "Resume" }</button>
+                            <button 
+                                className="reset" 
+                                onClick={() => {setTimer(0); setIsRunning(false)}}
+                                style={{ backgroundColor: isDark ? "#a93226" : "#e74c3c"}}
+                            >Reset</button>
+                        </>
+                    )
+                }
+
+                {
+                    showMessage && (
+                        <p><b>Timer Saved!</b></p>
+                    )
+                }
                 </div>
             </div>
         </>
