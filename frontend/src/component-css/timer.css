@@ -33,10 +33,22 @@
     font-size: 1rem;
 }
 
-.start:hover {
+.view-history-btn {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
     background-color: #1f8f4d;
 }
-.start:active {
+
+.start:hover, .view-history-btn:hover {
+    background-color: #1f8f4d;
+}
+.start:active, .view-history-btn:active {
     background-color: #196c3a;
 }
 

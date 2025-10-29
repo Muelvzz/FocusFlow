@@ -1,4 +1,5 @@
 import '../component-css/timer.css'
+import '../component-css/reflection.css'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Timer({ isDark }) {
@@ -11,8 +12,35 @@ export default function Timer({ isDark }) {
         const saved = localStorage.getItem("isRunning")
         return saved ? JSON.parse(saved) : false;
     })
+    const [showSession, setShowSession] = useState(false)
+    const [sessionList, setSessionList] = useState(() => {
+        const saved = localStorage.getItem("timer")
+        return saved ? JSON.parse(saved) : [];
+    })
 
     const interval = useRef(null)
+
+    const handleSave = (time) => {
+
+        const now = new Date(Date.now());
+        const formatter = new Intl.DateTimeFormat('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+        const formattedDate = formatter.format(now);
+
+        if (timer !== 0) {
+            const userData = {
+                id : Date.now(),
+                date : formattedDate,
+                time: time,
+            }
+            setSessionList([...sessionList, userData])
+            console.log(sessionList)
+        }
+    }
+
+    const handleDelete = (id) => {
+        const updatedSessionList = sessionList.filter(task => task.id !== id)
+        setSessionList(updatedSessionList)
+    }
 
     useEffect(() => {
         clearInterval(interval.current)
@@ -34,9 +62,52 @@ export default function Timer({ isDark }) {
         localStorage.setItem("isRunning", JSON.stringify(isRunning))
     }, [isRunning])
 
+    useEffect(() => {
+        localStorage.setItem("timer", JSON.stringify(sessionList))
+    }, [sessionList])
+
     return (
         <>
             <div className="timer-container" style={{ backgroundColor: isDark ? "#333" : "white"}} >
+                <button
+                    className='view-history-btn'
+                    onClick={() => setShowSession(true)}
+                >View History</button>
+
+                {
+                    showSession && (
+                        <div className="modal-overlay">
+
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <button onClick={() => setShowSession(false)} className='close-modal-btn'>X</button>
+                                    <h1>Session History</h1>
+                                </div>
+                                <div className="modal-body">
+                                    {sessionList.length > 0 ? (
+                                        sessionList.map((entry, index) => (
+                                            <ul className="reflc-ent-cont">
+                                                <li className="reflection-entry" key={ entry.id }>
+                                                    {String(Math.floor(entry.time / 3600)).padStart(2, '0')}:
+                                                    {String(Math.floor((entry.time % 3600) / 60)).padStart(2, '0')}:
+                                                    {String(entry.time % 60).padStart(2, '0')}
+                                                </li>
+                                                <p>{ entry.date }</p>
+                                                <button 
+                                                    className='del-btn'
+                                                    onClick={() => handleDelete(entry.id)}
+                                                >❌</button>
+                                            </ul>
+                                        ))) : (
+                                            <p className="no-reflection">No sessions yet...</p>
+                                        )}
+                                </div>
+                            </div>
+
+                        </div>
+                    )
+                }
+
                 <div className="timer-display">
                     <h1 style={{ color: isDark ? "white" : "black"}}>
                         {String(Math.floor(timer / 3600)).padStart(2, '0')}:
@@ -47,9 +118,9 @@ export default function Timer({ isDark }) {
                 <div className="timer-buttons">
                     <button 
                         className="start" 
-                        onClick={() => setIsRunning(true)}
+                        onClick={() => {isRunning ? handleSave(timer) : setIsRunning(true)}}
                         style={{ backgroundColor: isDark ? "#196c3a" : "#27ae60"}}
-                    >Start</button>
+                    >{ isRunning ? "Save" : "Start" }</button>
                     <button 
                         className="pause" 
                         onClick={() => setIsRunning(false)}
