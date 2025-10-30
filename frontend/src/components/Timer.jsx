@@ -13,6 +13,10 @@ export default function Timer({ isDark }) {
   })
   const [showSession, setShowSession] = useState(false)
   const [showMessage, setShowMessage] = useState(false)
+  const [timerTitle, setTimerTitle] = useState(() => {
+    const saved = localStorage.getItem("timerTitle")
+    return saved ? JSON.parse(saved) : ""
+  }) 
   const [sessionList, setSessionList] = useState(() => {
     const saved = localStorage.getItem("timer")
     return saved ? JSON.parse(saved) : []
@@ -42,6 +46,7 @@ export default function Timer({ isDark }) {
   useEffect(() => {
     if (elapsed % 5 === 0) {
       localStorage.setItem("localTimer", JSON.stringify(elapsed))
+      localStorage.setItem("timerTitle", JSON.stringify(timerTitle))
     }
   }, [elapsed])
 
@@ -65,12 +70,14 @@ export default function Timer({ isDark }) {
         id: Date.now(),
         date: formattedDate,
         time: time,
+        title: timerTitle,
       }
       setSessionList([...sessionList, userData])
       setShowMessage(true)
       setTimeout(() => setShowMessage(false), 1500)
 
       setElapsed(0)
+      setTimerTitle("")
       setIsRunning(false)
       startTimeRef.current = null
     }
@@ -87,6 +94,10 @@ export default function Timer({ isDark }) {
     startTimeRef.current = null
   }
 
+  const handleChange = (e) => {
+    setTimerTitle(e.target.value)
+  }
+
   const formatTime = (sec) => {
     const hours = String(Math.floor(sec / 3600)).padStart(2, "0")
     const minutes = String(Math.floor((sec % 3600) / 60)).padStart(2, "0")
@@ -96,7 +107,16 @@ export default function Timer({ isDark }) {
 
   return (
     <div className="timer-container" style={{ backgroundColor: isDark ? "#333" : "white" }}>
-      <button className='view-history-btn' onClick={() => setShowSession(true)}>View History</button>
+      <div className="timer-tabs">
+        <button className='view-history-btn' onClick={() => setShowSession(true)}>View History</button>
+        <input 
+          type="text" 
+          placeholder="What's up!"
+          className='timertitle-input'
+          value={timerTitle}
+          onChange={ handleChange }
+        />
+      </div>
 
       {showSession && (
         <div className="modal-overlay">
@@ -110,8 +130,9 @@ export default function Timer({ isDark }) {
                 sessionList.map((entry) => (
                   <ul className="reflc-ent-cont" key={entry.id}>
                     <li className="reflection-entry">
-                      {formatTime(entry.time)}
+                      <b>{ entry.title }</b> - {formatTime(entry.time)}
                     </li>
+
                     <p>{entry.date}</p>
                     <button className='del-btn' onClick={() => handleDelete(entry.id)}>❌</button>
                   </ul>
